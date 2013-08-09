@@ -10,8 +10,8 @@ module BLM
 			@header = {}
 			get_contents(@source, "#HEADER#", "#").each_line do |line|
 				next if line.empty?
-				key, value = line.split(" : ")
-				@header[key.downcase.to_sym] = value.gsub(/'/, "").strip
+				key, value = line.split(":")
+				@header[key.downcase.strip.to_sym] = value.gsub(/'/, "").strip
 			end
 			return @header
 		end
