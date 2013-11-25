@@ -9,7 +9,7 @@ module BLM
 		
 			@header = {}
 			get_contents(@source, "#HEADER#", "#").each_line do |line|
-				next if line.empty?
+				next if line.blank?
 				key, value = line.split(":")
 				@header[key.downcase.strip.to_sym] = value.gsub(/'/, "").strip
 			end
@@ -33,8 +33,11 @@ module BLM
 			@data = []
 			# get_contents(@source, "#DATA#", "#END#").split(header[:eor]).each do |line|
 			get_contents(@source, "#DATA#", "#END#").split(/#{Regexp.escape(header[:eor])}$/).each do |line|
+      # puts "LINE: #{line}"
+      # puts "DEFINITION: #{definition.inspect}"
 				entry = {}
 				line.split(header[:eof]).each_with_index do |field, index|
+          # puts "FIELD: #{field}, INDEX: #{index}"
 					entry[definition[index].to_sym] = field.strip
 				end
 				@data << Row.new(entry)
@@ -45,7 +48,7 @@ module BLM
 		private
 		def get_contents(string, start, finish)
 			start = string.index(start) + start.size
-			finish = string.index(finish, start) - finish.size
+			finish = string.index(finish, start) - 1 # - finish.size
 			string[start..finish].strip
 		end
 	end
