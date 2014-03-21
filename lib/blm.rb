@@ -24,20 +24,21 @@ module BLM
 				next if field.empty?
 				@definition << field.downcase.strip
 			end
+      # puts @definition.inspect
 			return @definition
 		end
 	
 		def data
 			return @data if defined?(@data)
-		
+      # puts "EOR: '#{header[:eor]}'"
 			@data = []
 			# get_contents(@source, "#DATA#", "#END#").split(header[:eor]).each do |line|
-			get_contents(@source, "#DATA#", "#END#").split(/#{Regexp.escape(header[:eor])}$/).each do |line|
-      # puts "LINE: #{line}"
+			get_contents(@source, "#DATA#", "#END#").split(/#{Regexp.escape(header[:eor])}.{0,1}$/).each do |line|
+      puts "LINE: #{line}"
       # puts "DEFINITION: #{definition.inspect}"
 				entry = {}
 				line.split(header[:eof]).each_with_index do |field, index|
-          # puts "FIELD: #{field}, INDEX: #{index}"
+          puts "FIELD: #{field}, INDEX: #{index}"
 					entry[definition[index].to_sym] = field.strip
 				end
 				@data << Row.new(entry)
