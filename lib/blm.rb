@@ -34,11 +34,11 @@ module BLM
 			@data = []
 			# get_contents(@source, "#DATA#", "#END#").split(header[:eor]).each do |line|
 			get_contents(@source, "#DATA#", "#END#").split(/#{Regexp.escape(header[:eor])}.{0,1}$/).each do |line|
-      puts "LINE: #{line}"
+      # puts "LINE: #{line}"
       # puts "DEFINITION: #{definition.inspect}"
 				entry = {}
 				line.split(header[:eof]).each_with_index do |field, index|
-          puts "FIELD: #{field}, INDEX: #{index}"
+          # puts "FIELD: #{field}, INDEX: #{index}"
 					entry[definition[index].to_sym] = field.strip
 				end
 				@data << Row.new(entry)
